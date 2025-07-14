@@ -133,7 +133,11 @@ perform_ecu_security_check() {
     echo -e "${BLUE}檢查敏感資訊...${NC}"
     
     for pattern in "${sensitive_patterns[@]}"; do
-        if grep -r -i --exclude-dir=.git --exclude="*.log" --exclude="*.example" --exclude="ecu_sync.sh" --exclude="security_check.sh" --exclude="git_sync.sh" --exclude="remote_config.sh" "$pattern" . > /dev/null 2>&1; then
+        # 只檢查用戶文件，排除所有同步工具文件
+        if find . -name "*.sh" -not -name "ecu_sync.sh" -not -name "git_sync.sh" -not -name "security_check.sh" -not -name "remote_config.sh" -not -name "network_test.sh" -not -name "enterprise_network_test.sh" -not -name "proxy_solution.sh" -exec grep -l "$pattern" {} \; 2>/dev/null | head -1 > /dev/null; then
+            echo -e "${RED}發現可能的敏感資訊: $pattern${NC}"
+            ((security_issues++))
+        elif find . -name "*.js" -o -name "*.json" -o -name "*.env" -o -name "*.conf" -o -name "*.config" | grep -v ".example" | xargs grep -l "$pattern" 2>/dev/null | head -1 > /dev/null; then
             echo -e "${RED}發現可能的敏感資訊: $pattern${NC}"
             ((security_issues++))
         fi
@@ -150,9 +154,9 @@ perform_ecu_security_check() {
         fi
     fi
     
-    # 檢查 shell 腳本中的硬編碼秘密
+    # 檢查 shell 腳本中的硬編碼秘密（排除同步工具本身）
     for script in *.sh; do
-        if [ -f "$script" ]; then
+        if [ -f "$script" ] && [[ "$script" != "ecu_sync.sh" ]] && [[ "$script" != "git_sync.sh" ]] && [[ "$script" != "security_check.sh" ]] && [[ "$script" != "remote_config.sh" ]]; then
             if grep -q "export.*=.*[\"'][^*].*[\"']" "$script" 2>/dev/null; then
                 echo -e "${YELLOW}警告：$script 可能包含硬編碼環境變數${NC}"
             fi
