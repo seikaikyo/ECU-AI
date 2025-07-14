@@ -1,0 +1,83 @@
+# ECU-AI 專案 .gitignore
+
+# 環境變數和配置
+.env
+.env.local
+.env.production
+.env.staging
+config.local.json
+proxy_config.local.json
+
+# 日誌文件
+*.log
+logs/
+proxy.log*
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# 運行時文件
+*.pid
+*.seed
+*.pid.lock
+.DS_Store
+
+# 編輯器和 IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系統文件
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# 測試覆蓋率
+coverage/
+.nyc_output/
+
+# 暫存文件
+tmp/
+temp/
+.tmp/
+
+# 安全相關
+*.pem
+*.key
+*.crt
+*.csr
+id_rsa*
+id_dsa*
+id_ecdsa*
+id_ed25519*
+
+# 備份文件
+*.backup
+*.bak
+*.orig
+
+# 壓縮文件
+*.zip
+*.tar.gz
+*.rar
+
+# 本地開發
+local/
+dev/
+sandbox/
+
+# 企業特定
+proxy_tokens.txt
+auth_cache/
+.claude_session
+
+# Git sync 相關
+.sync_cache/
+sync_errors.log
