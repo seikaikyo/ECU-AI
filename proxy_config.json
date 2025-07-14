@@ -1,0 +1,22 @@
+{
+  "port": 8888,
+  "targetHost": "claude.ai",
+  "logLevel": "info",
+  "timeout": 30000,
+  "userAgent": "Claude-Proxy/1.0",
+  "security": {
+    "allowedHosts": ["api.anthropic.com", "claude.ai", "console.anthropic.com"],
+    "maxConnections": 100,
+    "rateLimit": {
+      "windowMs": 60000,
+      "max": 100
+    }
+  },
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "file": "proxy.log",
+    "maxSize": "10MB",
+    "maxFiles": 5
+  }
+}
