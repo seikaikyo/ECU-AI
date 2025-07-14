@@ -133,12 +133,24 @@ perform_ecu_security_check() {
     echo -e "${BLUE}檢查敏感資訊...${NC}"
     
     for pattern in "${sensitive_patterns[@]}"; do
-        # 只檢查用戶文件，排除所有同步工具文件
-        if find . -name "*.sh" -not -name "ecu_sync.sh" -not -name "git_sync.sh" -not -name "security_check.sh" -not -name "remote_config.sh" -not -name "network_test.sh" -not -name "enterprise_network_test.sh" -not -name "proxy_solution.sh" -exec grep -l "$pattern" {} \; 2>/dev/null | head -1 > /dev/null; then
+        # 只檢查真正的配置文件，排除範本、工具文件和文檔
+        local found_files=$(find . -type f \
+            -not -path "./.git/*" \
+            -not -name "*.example" \
+            -not -name "*.template" \
+            -not -name "*_sync.sh" \
+            -not -name "security_check.sh" \
+            -not -name "remote_config.sh" \
+            -not -name "network_test.sh" \
+            -not -name "enterprise_network_test.sh" \
+            -not -name "proxy_solution.sh" \
+            -not -name "README.md" \
+            \( -name "*.env" -o -name "*.config" -o -name "*.conf" -o -name "*.json" \) \
+            -exec grep -l "$pattern" {} \; 2>/dev/null)
+        
+        if [ -n "$found_files" ]; then
             echo -e "${RED}發現可能的敏感資訊: $pattern${NC}"
-            ((security_issues++))
-        elif find . -name "*.js" -o -name "*.json" -o -name "*.env" -o -name "*.conf" -o -name "*.config" | grep -v ".example" | xargs grep -l "$pattern" 2>/dev/null | head -1 > /dev/null; then
-            echo -e "${RED}發現可能的敏感資訊: $pattern${NC}"
+            echo -e "${YELLOW}位置: $found_files${NC}"
             ((security_issues++))
         fi
     done
