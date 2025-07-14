@@ -20,16 +20,16 @@ echo ""
 
 # 檢查代理設定
 echo "1. 代理設定檢查："
-if [ -n "$HTTP_PROXY" ]; then
+if [ -n "${HTTP_PROXY:-}" ]; then
     echo "   HTTP_PROXY: $HTTP_PROXY"
 fi
-if [ -n "$HTTPS_PROXY" ]; then
+if [ -n "${HTTPS_PROXY:-}" ]; then
     echo "   HTTPS_PROXY: $HTTPS_PROXY"
 fi
-if [ -n "$ALL_PROXY" ]; then
+if [ -n "${ALL_PROXY:-}" ]; then
     echo "   ALL_PROXY: $ALL_PROXY"
 fi
-if [ -z "$HTTP_PROXY" ] && [ -z "$HTTPS_PROXY" ] && [ -z "$ALL_PROXY" ]; then
+if [ -z "${HTTP_PROXY:-}" ] && [ -z "${HTTPS_PROXY:-}" ] && [ -z "${ALL_PROXY:-}" ]; then
     echo "   未發現系統層級代理設定"
 fi
 

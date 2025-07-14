@@ -123,10 +123,10 @@ echo ""
 
 # 企業代理檢測
 echo "4. 企業代理環境檢測："
-if [ -n "$HTTP_PROXY" ] || [ -n "$HTTPS_PROXY" ]; then
+if [ -n "${HTTP_PROXY:-}" ] || [ -n "${HTTPS_PROXY:-}" ]; then
     echo "   發現代理設定："
-    [ -n "$HTTP_PROXY" ] && echo "   HTTP_PROXY: $HTTP_PROXY"
-    [ -n "$HTTPS_PROXY" ] && echo "   HTTPS_PROXY: $HTTPS_PROXY"
+    [ -n "${HTTP_PROXY:-}" ] && echo "   HTTP_PROXY: $HTTP_PROXY"
+    [ -n "${HTTPS_PROXY:-}" ] && echo "   HTTPS_PROXY: $HTTPS_PROXY"
 else
     echo "   未發現明顯的代理設定"
     
